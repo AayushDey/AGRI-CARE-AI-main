@@ -17,8 +17,20 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 warnings.filterwarnings("ignore", message=".*XGBoost.*")
 
 # ========== API KEY CONFIGURATION ==========
-# 🔑 PASTE YOUR GROQ API KEY HERE:
-GROQ_API_KEY = "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"
+# Load Groq API Key from environment variable
+import sys
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+if not GROQ_API_KEY:
+    st.error("❌ Error: GROQ_API_KEY not found!")
+    st.info("📋 Please set GROQ_API_KEY environment variable or create a .env file with: GROQ_API_KEY=your_key_here")
+    st.stop()
 # =========================================
 
 
