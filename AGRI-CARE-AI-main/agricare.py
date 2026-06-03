@@ -21,18 +21,13 @@ warnings.filterwarnings("ignore", message=".*XGBoost.*")
 import sys
 try:
     from dotenv import load_dotenv
-    load_dotenv()
+    load_dotenv(os.path.join(script_dir, '.env'))
 except ImportError:
     pass
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-if not GROQ_API_KEY:
-    st.error("❌ Error: GROQ_API_KEY not found!")
-    st.info("📋 Please set GROQ_API_KEY environment variable or create a .env file with: GROQ_API_KEY=your_key_here")
-    st.stop()
 # =========================================
-
 
 torch.classes.__path__ = []
 
@@ -47,11 +42,17 @@ def load_models():
         st.error(f"🔴 Error loading models: {e}")
         st.stop()
 
-# Load models once at startup
-disease_model, soil_model = load_models()
-
 # ------------------ CONFIG & STYLE ------------------
 st.set_page_config(page_title="🌾 AgriCare AI", layout="centered", initial_sidebar_state="collapsed")
+
+# Check API Key after st.set_page_config()
+if not GROQ_API_KEY:
+    st.error("❌ Error: GROQ_API_KEY not found!")
+    st.info("📋 Please set GROQ_API_KEY environment variable or create a .env file with: GROQ_API_KEY=your_key_here")
+    st.stop()
+
+# Load models once at startup
+disease_model, soil_model = load_models()
 
 st.markdown("""
     <style>
