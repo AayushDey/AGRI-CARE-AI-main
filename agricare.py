@@ -2,8 +2,6 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 from ultralytics import YOLO
-from langchain_groq import ChatGroq
-from langchain_core.messages import HumanMessage
 import torch
 import base64
 import io
@@ -342,12 +340,6 @@ def generate_english_gpt_advice(plant_name, disease_name):
     Both plant_name and disease_name are clean strings (not raw YOLO labels).
     """
     try:
-        # Using qwen/qwen3.8-27b — confirmed working with this API key
-        model = ChatGroq(
-            model="qwen/qwen3.8-27b",
-            api_key=GROQ_API_KEY
-        )
-
         prompt = (
             f"I am a farmer. My {plant_name} plant has been diagnosed with "
             f"{disease_name}.\n\n"
@@ -360,11 +352,7 @@ def generate_english_gpt_advice(plant_name, disease_name):
             f"Be specific, practical, and farmer-friendly."
         )
 
-        response = model.invoke(
-            [HumanMessage(content=prompt)]
-        )
-
-        return response.content.strip()
+        return call_groq(prompt)
 
     except Exception as e:
         st.error(f"Error generating advice: {str(e)}")
@@ -545,10 +533,14 @@ with tab1:
 # ----------- TAB 2: FARMER AI ADVISOR -------------
 
 def call_groq(prompt: str, max_tokens: int = 900) -> str:
-    """Helper: call qwen/qwen3.8-27b with a plain text prompt."""
-    model = ChatGroq(model="qwen/qwen3.8-27b", api_key=GROQ_API_KEY)
-    response = model.invoke([HumanMessage(content=prompt)])
-    return response.content.strip()
+    """Helper: call qwen/qwen3.8-27b with a plain text prompt via Groq API."""
+    client = Groq(api_key=GROQ_API_KEY)
+    response = client.chat.completions.create(
+        model="qwen/qwen3.8-27b",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=max_tokens
+    )
+    return response.choices[0].message.content.strip()
 
 
 with tab2:
