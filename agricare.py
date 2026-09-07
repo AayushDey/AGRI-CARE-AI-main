@@ -30,8 +30,6 @@ if not GROQ_API_KEY:
 
 # =========================================
 
-torch.classes.__path__ = []
-
 # ========== CLASS MAP ==========
 # Maps every YOLO class name → {plant, status, disease}
 # status: "healthy" or "diseased"
