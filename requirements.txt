@@ -1,7 +1,8 @@
 streamlit==1.42.2
 python-dotenv==1.0.0
 groq>=0.11.0
+opencv-python-headless==4.9.0.80
 ultralytics==8.3.103
-numpy>=1.24.0
-torch
-torchvision
+numpy>=1.24.0,<2.0.0
+torch==2.2.2
+torchvision==0.17.2
