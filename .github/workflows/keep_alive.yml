@@ -1,0 +1,16 @@
+name: Keep Streamlit App Awake
+
+on:
+  schedule:
+    # Runs every 6 hours to prevent Streamlit Cloud from putting the app to sleep
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send keep-alive ping to Streamlit app
+        run: |
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 https://agri-care-ai-main-jyfbvfqutjw6ecnotgb4pq.streamlit.app/)
+          echo "Pinging Streamlit app returned HTTP status code: $STATUS_CODE"

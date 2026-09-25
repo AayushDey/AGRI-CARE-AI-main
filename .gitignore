@@ -1,7 +1,5 @@
 # Streamlit Files
-.streamlit/
 .streamlit/secrets.toml
-.streamlit/config.toml
 streamlit_app.json
 streamlit_cache/
 *.streamlit_cache

@@ -3,10 +3,6 @@ from PIL import Image
 import numpy as np
 from ultralytics import YOLO
 import torch
-try:
-    torch.classes.__path__ = []
-except Exception:
-    pass
 import base64
 import io
 import json
